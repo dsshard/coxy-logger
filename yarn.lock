@@ -7,15 +7,10 @@
   resolved "https://registry.yarnpkg.com/@coxy/eslint-config/-/eslint-config-1.0.1.tgz#65ce1cc7e4b480fb4da0f3f1ae9f0ef2ad0594a6"
   integrity sha512-YvUhuBdCkQOa9BZzwQhosA8kgxKrRIsqeH1IrLZbrcd+S7tSvnTRZDJLTp1qUb5lKyesyVr4Co2LSMqlgQnbmQ==
 
-"@coxy/utils@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@coxy/utils/-/utils-1.0.3.tgz#a4fd8622ddda96175a5ce6088fe4e4b60146079f"
-  integrity sha512-MT7AVo8OGEeC8i7IxVe3hPo6en4i3d/6fbeLK2Gis2QqS2zkm9OKuFJJ+wVGxhtr875OdO23POmwROtAfInp5g==
-  dependencies:
-    "@coxy/utils" "file:../../../Library/Caches/Yarn/v6/npm-@coxy-utils-1.0.3-a4fd8622ddda96175a5ce6088fe4e4b60146079f-integrity/node_modules/@coxy/utils/.yalc/@coxy/utils"
-
-"@coxy/utils@file:.yalc/@coxy/utils":
-  version "1.0.2"
+"@coxy/utils@1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@coxy/utils/-/utils-1.0.4.tgz#21a77e509dc8e7d84cfdf880f03b736051a5d579"
+  integrity sha512-w2xL1SfAyayJp/SE4aQ+62b+xbkQjaR66T993gVVeMn8tCMLu5iLCVawpzQ1nwIRx4O4J8mkeTMg0uNEm7dWfw==
 
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
