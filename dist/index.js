@@ -15,8 +15,14 @@ class Logger {
             this.prefixes.push(...(0, utils_1.toArray)(params === null || params === void 0 ? void 0 : params.name));
         }
     }
-    setEnabledFlag(flag) {
+    disableLogger(flag) {
         this.isEnabled = flag;
+    }
+    enableTime(isEnabled) {
+        if (isEnabled) {
+            this.lastTime = Date.now();
+        }
+        this.isTime = isEnabled;
     }
     resetId() {
         this.uuid = (0, utils_1.uuid)(this.options.uuid || 5);
@@ -27,6 +33,10 @@ class Logger {
         if (!this.isEnabled)
             return;
         const fn = console[type];
+        if (this.isTime) {
+            args.unshift(`[time: ${Date.now() - this.lastTime}ms]`);
+            this.lastTime = Date.now();
+        }
         if (this.uuid)
             args.unshift(`[${this.uuid}]`);
         if (this.prefixes.length) {
@@ -37,7 +47,10 @@ class Logger {
         fn(...args);
     }
     fork(params) {
-        const name = [...this.prefixes].concat(...(0, utils_1.toArray)(params.name));
+        let name = this.prefixes;
+        if (params.name) {
+            name = [...this.prefixes].concat(...(0, utils_1.toArray)(params.name));
+        }
         return new Logger(Object.assign(Object.assign({}, params), { name }));
     }
     log(...args) {

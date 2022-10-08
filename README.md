@@ -20,24 +20,28 @@ const { Logger } = require('@coxy/ts-node-logger');
 
 **Params**
 
-| value | type | default value |
-| --- | --- | --- |
-| name | string | null |
-| length uuid | number | 5 |
+| value | type   | default value |
+|-------|--------|--------------:|
+| name  | string |          null |
+| uuid  | number |          null |
 
 ```javascript
 const logger = new Logger;
 
 const logger2 = new Logger({ name: 'abc' });
 
-const logger3 = new Logger({ name: 'foo', length: 8 });
+const logger3 = new Logger({ name: 'foo', uuid: 8 });
 ```
 
 **Methods**
 
-|  |  |
-| --- | --- | 
-| logger.resetId() | reset Id |
+
+| Method                          | Description                        |                  |
+|---------------------------------|:-----------------------------------|------------------|
+| logger.resetId()                | reset Id                           |                  |
+| logger.fork({ name: 'string' }) | fork current logger & add new name |                  |
+| logger.disableLogger(false)     | enable/disable logger              | default enabled  |
+| logger.enableTime(true)         | enable/disable time log (ms)       | default disabled |
 
 ```javascript
 const logger = new Logger;
@@ -58,9 +62,9 @@ logger.error('some message'); //[675da0e1] some message
 ```
 
 ```javascript
-const logger2 = new Logger({ length: 10 });
+const logger2 = new Logger({ uuid: 10 });
 logger.wann('message') //[2f301fe0-b] 123
 
-const logger = new Logger({ name: 'foo', length: 8 });
+const logger = new Logger({ name: 'foo', uuid: 8 });
 logger.warn('message') //[foo] [675da0e1] 123
 ```
