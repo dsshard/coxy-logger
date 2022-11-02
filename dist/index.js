@@ -6,6 +6,7 @@ class Logger {
     constructor(params) {
         this.prefixes = [];
         this.uuid = null;
+        this.middlewares = [];
         this.options = params;
         this.isEnabled = params.isEnabled !== false;
         if (params.uuid) {
@@ -14,6 +15,9 @@ class Logger {
         if (params === null || params === void 0 ? void 0 : params.name) {
             this.prefixes.push(...(0, utils_1.toArray)(params === null || params === void 0 ? void 0 : params.name));
         }
+    }
+    use(middleware) {
+        this.middlewares.push(middleware);
     }
     disableLogger(flag) {
         this.isEnabled = flag;
@@ -28,8 +32,6 @@ class Logger {
         this.uuid = (0, utils_1.uuid)(this.options.uuid || 5);
     }
     message(type, ...args) {
-        if (process.env.NODE_ENV === 'test')
-            return;
         if (!this.isEnabled)
             return;
         const fn = console[type];
@@ -45,13 +47,24 @@ class Logger {
             });
         }
         fn(...args);
+        if (this.middlewares.length > 0) {
+            this.middlewares.forEach((md) => {
+                md(...args);
+            });
+        }
     }
     fork(params) {
         let name = this.prefixes;
         if (params.name) {
             name = [...this.prefixes].concat(...(0, utils_1.toArray)(params.name));
         }
-        return new Logger(Object.assign(Object.assign({}, params), { name }));
+        const logger = new Logger(Object.assign(Object.assign({}, params), { name }));
+        if (this.middlewares.length) {
+            this.middlewares.forEach((md) => {
+                logger.use(md);
+            });
+        }
+        return logger;
     }
     log(...args) {
         this.message('log', ...args);
