@@ -5,8 +5,8 @@ interface LoggerConstructorParams {
   uuid?: number
   isEnabled?: boolean
 }
-
 type Args = any
+type Middleware = (...args: Args[]) => void
 
 export class Logger {
   protected readonly prefixes: string[] = []
@@ -14,6 +14,7 @@ export class Logger {
   private isEnabled: boolean
   private isTime: boolean
   private lastTime: number
+  private middlewares = []
   private options: LoggerConstructorParams
 
   constructor (params?: LoggerConstructorParams) {
@@ -26,6 +27,10 @@ export class Logger {
     if (params?.name) {
       this.prefixes.push(...toArray(params?.name))
     }
+  }
+
+  public use (middleware: Middleware) {
+    this.middlewares.push(middleware)
   }
 
   public disableLogger (flag: boolean): void {
@@ -44,7 +49,6 @@ export class Logger {
   }
 
   private message (type: keyof Console, ...args: Args[]): void {
-    if (process.env.NODE_ENV === 'test') return
     if (!this.isEnabled) return
 
     // eslint-disable-next-line no-console
@@ -62,6 +66,12 @@ export class Logger {
     }
 
     fn(...args)
+
+    if (this.middlewares.length > 0) {
+      this.middlewares.forEach((md) => {
+        md(...args)
+      })
+    }
   }
 
   public fork (params?: LoggerConstructorParams): Logger {
@@ -69,7 +79,13 @@ export class Logger {
     if (params.name) {
       name = [...this.prefixes].concat(...toArray(params.name))
     }
-    return new Logger({ ...params, name })
+    const logger = new Logger({ ...params, name })
+    if (this.middlewares.length) {
+      this.middlewares.forEach((md) => {
+        logger.use(md)
+      })
+    }
+    return logger
   }
 
   public log (...args: Args[]): void {
