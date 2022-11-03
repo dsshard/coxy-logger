@@ -49,8 +49,6 @@ export class Logger {
   }
 
   private message (type: keyof Console, ...args: Args[]): void {
-    if (!this.isEnabled) return
-
     // eslint-disable-next-line no-console
     const fn: any = console[type]
     if (this.isTime) {
@@ -65,13 +63,14 @@ export class Logger {
       })
     }
 
-    fn(...args)
-
     if (this.middlewares.length > 0) {
       this.middlewares.forEach((md) => {
         md(...args)
       })
     }
+
+    if (!this.isEnabled) return
+    fn(...args)
   }
 
   public fork (params?: LoggerConstructorParams): Logger {
