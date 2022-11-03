@@ -19,7 +19,7 @@ class Logger {
     use(middleware) {
         this.middlewares.push(middleware);
     }
-    disableLogger(flag) {
+    setLoggerEnableStatus(flag) {
         this.isEnabled = flag;
     }
     enableTime(isEnabled) {
@@ -58,7 +58,7 @@ class Logger {
         if (params.name) {
             name = [...this.prefixes].concat(...(0, utils_1.toArray)(params.name));
         }
-        const logger = new Logger(Object.assign(Object.assign({}, params), { name }));
+        const logger = new Logger(Object.assign(Object.assign({}, params), { name, isEnabled: this.isEnabled }));
         if (this.middlewares.length) {
             this.middlewares.forEach((md) => {
                 logger.use(md);

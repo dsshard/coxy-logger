@@ -33,7 +33,7 @@ export class Logger {
     this.middlewares.push(middleware)
   }
 
-  public disableLogger (flag: boolean): void {
+  public setLoggerEnableStatus (flag: boolean): void {
     this.isEnabled = flag
   }
 
@@ -78,7 +78,7 @@ export class Logger {
     if (params.name) {
       name = [...this.prefixes].concat(...toArray(params.name))
     }
-    const logger = new Logger({ ...params, name })
+    const logger = new Logger({ ...params, name, isEnabled: this.isEnabled })
     if (this.middlewares.length) {
       this.middlewares.forEach((md) => {
         logger.use(md)
