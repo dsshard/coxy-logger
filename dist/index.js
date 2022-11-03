@@ -19,10 +19,10 @@ class Logger {
     use(middleware) {
         this.middlewares.push(middleware);
     }
-    setLoggerEnableStatus(flag) {
+    setEnableStatus(flag) {
         this.isEnabled = flag;
     }
-    enableTime(isEnabled) {
+    setEnableTime(isEnabled) {
         if (isEnabled) {
             this.lastTime = Date.now();
         }

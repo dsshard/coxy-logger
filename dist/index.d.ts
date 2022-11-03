@@ -15,8 +15,8 @@ export declare class Logger {
     private options;
     constructor(params?: LoggerConstructorParams);
     use(middleware: Middleware): void;
-    setLoggerEnableStatus(flag: boolean): void;
-    enableTime(isEnabled: boolean): void;
+    setEnableStatus(flag: boolean): void;
+    setEnableTime(isEnabled: boolean): void;
     resetId(): void;
     private message;
     fork(params?: LoggerConstructorParams): Logger;

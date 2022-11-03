@@ -33,11 +33,11 @@ export class Logger {
     this.middlewares.push(middleware)
   }
 
-  public setLoggerEnableStatus (flag: boolean): void {
+  public setEnableStatus (flag: boolean): void {
     this.isEnabled = flag
   }
 
-  public enableTime (isEnabled: boolean): void {
+  public setEnableTime (isEnabled: boolean): void {
     if (isEnabled) {
       this.lastTime = Date.now()
     }
