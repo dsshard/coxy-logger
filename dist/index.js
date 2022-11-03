@@ -32,8 +32,6 @@ class Logger {
         this.uuid = (0, utils_1.uuid)(this.options.uuid || 5);
     }
     message(type, ...args) {
-        if (!this.isEnabled)
-            return;
         const fn = console[type];
         if (this.isTime) {
             args.unshift(`[time: ${Date.now() - this.lastTime}ms]`);
@@ -46,12 +44,14 @@ class Logger {
                 args.unshift(`[${prefix}]`);
             });
         }
-        fn(...args);
         if (this.middlewares.length > 0) {
             this.middlewares.forEach((md) => {
                 md(...args);
             });
         }
+        if (!this.isEnabled)
+            return;
+        fn(...args);
     }
     fork(params) {
         let name = this.prefixes;
