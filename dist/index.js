@@ -46,7 +46,7 @@ class Logger {
         }
         if (this.middlewares.length > 0) {
             this.middlewares.forEach((md) => {
-                md(...args);
+                md(type, ...args);
             });
         }
         if (!this.isEnabled)

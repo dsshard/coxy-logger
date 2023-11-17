@@ -34,6 +34,6 @@
     "typescript": "4.8.4"
   },
   "dependencies": {
-    "@coxy/utils": "1.0.8"
+    "@coxy/utils": "1.0.17"
   }
 }
