@@ -1,7 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Logger = void 0;
-const utils_1 = require("@coxy/utils");
+exports.Logger = exports.toArray = exports.uuid = void 0;
+const s4 = () => Math.floor((1 + Math.random()) * 0x10000)
+    .toString(16)
+    .substring(1);
+function uuid(len = 100) {
+    return `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4()}${s4()}${s4()}`.slice(0, len);
+}
+exports.uuid = uuid;
+function toArray(any) {
+    return Array.isArray(any) ? any : [any];
+}
+exports.toArray = toArray;
 class Logger {
     constructor(params) {
         this.prefixes = [];
@@ -10,10 +20,10 @@ class Logger {
         this.options = params;
         this.isEnabled = params.isEnabled !== false;
         if (params.uuid) {
-            this.uuid = (0, utils_1.uuid)(params.uuid || 5);
+            this.uuid = uuid(params.uuid || 5);
         }
         if (params === null || params === void 0 ? void 0 : params.name) {
-            this.prefixes.push(...(0, utils_1.toArray)(params === null || params === void 0 ? void 0 : params.name));
+            this.prefixes.push(...toArray(params === null || params === void 0 ? void 0 : params.name));
         }
     }
     use(middleware) {
@@ -29,7 +39,7 @@ class Logger {
         this.isTime = isEnabled;
     }
     resetId() {
-        this.uuid = (0, utils_1.uuid)(this.options.uuid || 5);
+        this.uuid = uuid(this.options.uuid || 5);
     }
     message(type, ...args) {
         const fn = console[type];
@@ -56,7 +66,7 @@ class Logger {
     fork(params) {
         let name = this.prefixes;
         if (params.name) {
-            name = [...this.prefixes].concat(...(0, utils_1.toArray)(params.name));
+            name = [...this.prefixes].concat(...toArray(params.name));
         }
         const logger = new Logger(Object.assign(Object.assign({}, params), { name, isEnabled: this.isEnabled }));
         if (this.middlewares.length) {

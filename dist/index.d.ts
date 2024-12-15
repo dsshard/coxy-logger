@@ -1,3 +1,5 @@
+export declare function uuid(len?: number): string;
+export declare function toArray<T>(any: T | T[]): T[];
 interface LoggerConstructorParams {
     name: string[] | string;
     uuid?: number;
