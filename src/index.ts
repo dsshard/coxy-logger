@@ -13,10 +13,10 @@ export function toArray<T> (any: T | T[]): T[] {
 
 interface LoggerConstructorParams {
   name: string[] | string
-  uuid?: number
+  uuidLen?: number
   isEnabled?: boolean
 }
-type Args = any
+type Args = unknown
 type Middleware = (...args: Args[]) => void
 
 export class Logger {
@@ -32,8 +32,8 @@ export class Logger {
     this.options = params
     this.isEnabled = params.isEnabled !== false
 
-    if (params.uuid) {
-      this.uuid = uuid(params.uuid || 5)
+    if (params.uuidLen) {
+      this.uuid = uuid(params.uuidLen || 5)
     }
     if (params?.name) {
       this.prefixes.push(...toArray(params?.name))
@@ -56,12 +56,12 @@ export class Logger {
   }
 
   public resetId (): void {
-    this.uuid = uuid(this.options.uuid || 5)
+    this.uuid = uuid(this.options.uuidLen || 5)
   }
 
   private message (type: keyof Console, ...args: Args[]): void {
     // eslint-disable-next-line no-console
-    const fn: any = console[type]
+    const fn = console[type] as typeof console.log
     if (this.isTime) {
       args.unshift(`[time: ${Date.now() - this.lastTime}ms]`)
       this.lastTime = Date.now()

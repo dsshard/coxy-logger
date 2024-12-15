@@ -2,11 +2,11 @@ export declare function uuid(len?: number): string;
 export declare function toArray<T>(any: T | T[]): T[];
 interface LoggerConstructorParams {
     name: string[] | string;
-    uuid?: number;
+    uuidLen?: number;
     isEnabled?: boolean;
 }
-declare type Args = any;
-declare type Middleware = (...args: Args[]) => void;
+type Args = unknown;
+type Middleware = (...args: Args[]) => void;
 export declare class Logger {
     protected readonly prefixes: string[];
     private uuid;
