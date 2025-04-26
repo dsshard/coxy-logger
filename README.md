@@ -1,70 +1,155 @@
-# ts-node-logger
+# @coxy/logger
 
-**Install**
+A flexible and extensible logger for Node.js and browsers with UUIDs, prefixes, time tracking, and middleware support.
 
-```shell
-npm install @coxy/ts-node-logger
+## Installation
+
+```bash
+npm install @coxy/logger
 ```
 
-**Create logger**
+## Quick Start
+
+### Importing
+
+Using **ES Modules**:
 
 ```javascript
-import { Logger } from '@coxy/ts-node-logger';
+import { Logger } from '@coxy/logger';
 ```
 
-... or using CommonJS syntax:
+Using **CommonJS**:
 
 ```javascript
-const { Logger } = require('@coxy/ts-node-logger');
+const { Logger } = require('@coxy/logger');
 ```
 
-**Params**
-
-| value | type   | default value |
-|-------|--------|--------------:|
-| name  | string |          null |
-| uuid  | number |          null |
+## Creating a Logger
 
 ```javascript
-const logger = new Logger;
+const logger = new Logger();
 
-const logger2 = new Logger({ name: 'abc' });
+const namedLogger = new Logger({ name: 'my-app' });
 
-const logger3 = new Logger({ name: 'foo', uuid: 8 });
+const customLogger = new Logger({ name: 'service', uuidLen: 8, isTime: true });
 ```
 
-**Methods**
+### Logger Parameters
 
+| Parameter   | Type               | Default | Description                         |
+|-------------|--------------------|---------|-------------------------------------|
+| `name`      | string \| string[] | `null`  | Custom name or array of names.      |
+| `uuidLen`   | number             | `5`     | Length of the UUID string.          |
+| `isTime`    | boolean            | `false` | Enable/disable time tracking.       |
+| `isEnabled` | boolean            | `true`  | Enable/disable the logger globally. |
 
-| Method                          | Description                        |                  |
-|---------------------------------|:-----------------------------------|------------------|
-| logger.resetId()                | reset Id                           |                  |
-| logger.fork({ name: 'string' }) | fork current logger & add new name |                  |
-| logger.disableLogger(false)     | enable/disable logger              | default enabled  |
-| logger.enableTime(true)         | enable/disable time log (ms)       | default disabled |
+---
+
+## Methods
+
+| Method                              | Description                                              |
+|-------------------------------------|----------------------------------------------------------|
+| `logger.log(...args)`               | Log a standard message.                                  |
+| `logger.info(...args)`              | Log an informational message.                            |
+| `logger.warn(...args)`              | Log a warning message.                                   |
+| `logger.error(...args)`             | Log an error message.                                    |
+| `logger.use(middleware)`            | Add a middleware function that intercepts all messages.  |
+| `logger.setEnableStatus(flag)`      | Dynamically enable or disable logging.                   |
+| `logger.setEnableTime(flag)`        | Dynamically enable or disable time tracking.             |
+| `logger.resetId()`                  | Generate and assign a new UUID.                          |
+| `logger.fork(params?)`              | Create a child logger inheriting prefixes and options.   |
+
+---
+
+## Examples
+
+### Basic Logging
 
 ```javascript
-const logger = new Logger;
-logger.log('123'); //[3e691f06-fb1a-e2] 123
-logger.resetId();
-logger.log('123'); //[2e0ab648-1310-cd] 123
+const logger = new Logger();
+
+logger.log('App started');
+logger.info('Fetching data');
+logger.warn('Low memory');
+logger.error('Unhandled exception');
 ```
 
-**Exapmle**
+### Using Prefixes and UUIDs
 
 ```javascript
-const logger = new Logger;
+const logger = new Logger({ name: 'MainService', uuidLen: 8 });
 
-logger.log('some message'); //[675da0e1] some message
-logger.info('some message'); //[675da0e1] some message
-logger.warn('some message'); //[675da0e1] some message
-logger.error('some message'); //[675da0e1] some message
+logger.info('Service initialized');
+// Output: [MainService] [2a3b4c5d] Service initialized
 ```
+
+### Forking a Logger
 
 ```javascript
-const logger2 = new Logger({ uuid: 10 });
-logger.wann('message') //[2f301fe0-b] 123
+const mainLogger = new Logger({ name: 'Parent' });
+const childLogger = mainLogger.fork({ name: 'Child' });
 
-const logger = new Logger({ name: 'foo', uuid: 8 });
-logger.warn('message') //[foo] [675da0e1] 123
+childLogger.log('Child started');
+// Output: [Parent] [Child] [abcd1234] Child started
 ```
+
+### Enabling Time Tracking
+
+```javascript
+const logger = new Logger({ isTime: true });
+
+logger.log('Start task');
+setTimeout(() => logger.log('End task'), 1000);
+
+// Output:
+// [uuid] [time: 0ms] Start task
+// [uuid] [time: 1000ms] End task
+```
+
+### Disabling the Logger
+
+```javascript
+const logger = new Logger();
+
+logger.setEnableStatus(false);
+logger.log('This will not be printed');
+
+logger.setEnableStatus(true);
+logger.log('Logging resumed');
+```
+
+### Using Middleware
+
+```javascript
+const logger = new Logger();
+
+logger.use((type, ...args) => {
+  if (type === 'error') {
+    // send errors to external monitoring service
+    sendErrorToService(args);
+  }
+});
+
+logger.error('Critical error');
+```
+
+---
+
+## Why Choose Coxy Logger?
+
+- **Simple API**: Minimalistic but powerful.
+- **UUID & Prefix Support**: Traceable logs for distributed systems.
+- **Middleware System**: Hook into logs programmatically.
+- **Forkable**: Inherit and branch loggers easily.
+- **Performance Optimized**: Lightweight and fast.
+
+---
+
+## License
+
+MIT License.
+
+---
+
+> 🔗 **Fun Fact:** Early logging systems in aviation had similar concepts of unique identifiers and timestamps to trace black box recordings accurately!
+

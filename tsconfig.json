@@ -8,8 +8,8 @@
     "experimentalDecorators": true,
     "target": "es2017",
     "sourceMap": false,
-    "composite": true,
-    "incremental": true,
+    "composite": false,
+    "incremental": false,
     "noUnusedLocals": true,
     "noUnusedParameters": false,
     "resolveJsonModule": true,
@@ -18,9 +18,5 @@
     "rootDir": "./src"
   },
   "include": ["./src/**/*", "./src/**/*.json"],
-  "exclude": [
-    "**/*.d.ts",
-    "./node_modules",
-    "dist"
-  ]
+  "exclude": ["**/*.d.ts", "./node_modules", "dist"]
 }
